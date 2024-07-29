@@ -1,5 +1,5 @@
 import numpy as np
-import gzip
+import py7zr
 import os
 import codecs
 from hmsMain import hms, ihms
