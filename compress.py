@@ -44,7 +44,8 @@ def compress(path,outputname):
     with codecs.open(outputname,"w","utf-8-sig") as f:
         for i in O:
             f.write(str(i))
-            print(i)
+            #print(i)
+    
 
 def decompress(path,output, pctls, upper_frequency):
     ul = hms(upper_frequency)

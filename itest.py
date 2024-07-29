@@ -12,3 +12,5 @@ import utils
 print("utils: passed")
 import plots
 print("plots: passed")
+import compress
+print("compress: passed")
