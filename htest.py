@@ -4,28 +4,36 @@ import hmsMain
 import re
 import time
 import gzip
-path = "/home/engineer/microHMS-0.2.0/J40D"
+import compress
+import string
+import random
+path = "../in"
 binsize = 10.0
 band1 = [0,2500]
 start_time = time.time()
 
 g = open("timelog.txt","a")
-
-for hour in range(1):
+for fnlocal in os.listdir(path):
+	filename = os.path.join(path,fnlocal)
 	os.system("mkdir tempdir")
-	if hour<10:
-		shour = "0"+str(hour)
-	else:
-		shour = str(hour)
-	os.system("cp ../J40D/5k_SurRidge-D113-191125-"+shour+"0000.x.wav ./tempdir")
-	path = "./tempdir"
-	q = hmsMain.calcHMS(path,band1,binsize)
+	os.system("cp "+filename+" ./tempdir")
+	tpath = "./tempdir"
+	q = hmsMain.calcHMS(tpath,band1,binsize)
 	print("FINISHED CALCULATING HMS FROM SIGNAL! CALCULATING PERCENTILES...")
 	a = hmsMain.calcPercentilesFromHMS(band1,q)
 	ul = hmsMain.hms(band1[1])-hmsMain.hms(band1[0])
-	f = gzip.GzipFile("output"+shour+".npy.gz","w")
-	np.save(file=f,arr=a[1][0])
-	'''	
+	tmpfilesuffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=7))
+	with open("./tempdir/tmp"+tmpfilesuffix+".txt",'w') as f:
+		for i in range(ul):
+			s = str(a[1][0][i])
+			s = ''.join(s.splitlines())
+			f.write(s.replace("]",'').replace("[",'')+"\n")
+	compress.compress("./tempdir/tmp"+tmpfilesuffix+".txt","./tempdir/HMDP.txt") 
+	os.system("rm ./tempdir/tmp"+tmpfilesuffix+".txt")
+	os.system("py7zr c output.7z ./")
+	os.system("mv output.7z ../out/"+str(fnlocal)+".7z")
+
+	'''
 	with open('../datamisc/output'+shour+'.txt','w') as f:
 	    for i in range(ul):
 	        s = str(a[1][0][i])
