@@ -65,7 +65,10 @@ def decompress(path,output, pctls, upper_frequency):
             #length is 4. the character either begins with c2 or c3.
             #if it's c2, then subtract 50,
             #if it's c3, add 50.
-            if decoded[1]=='3':
+            if hexrep[1]=='3':
+                t = int(hexrep[2:],16)-18
+                while t<127:
+                    t += 50
                 decoded += str(int(hexrep[2:],16)-18) + " "
             else:
                 decoded += str(int(hexrep[2:],16)-68) + " "

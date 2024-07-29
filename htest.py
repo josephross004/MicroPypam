@@ -7,7 +7,8 @@ import gzip
 import compress
 import string
 import random
-path = "../in"
+#path = "../in"
+path = "E:\\J_40D"
 binsize = 10.0
 band1 = [0,2500]
 start_time = time.time()
@@ -16,7 +17,7 @@ g = open("timelog.txt","a")
 for fnlocal in os.listdir(path):
 	filename = os.path.join(path,fnlocal)
 	os.system("mkdir tempdir")
-	os.system("cp "+filename+" ./tempdir")
+	os.system("copy "+str(filename)+" .\\tempdir")
 	tpath = "./tempdir"
 	q = hmsMain.calcHMS(tpath,band1,binsize)
 	print("FINISHED CALCULATING HMS FROM SIGNAL! CALCULATING PERCENTILES...")
@@ -28,10 +29,11 @@ for fnlocal in os.listdir(path):
 			s = str(a[1][0][i])
 			s = ''.join(s.splitlines())
 			f.write(s.replace("]",'').replace("[",'')+"\n")
-	compress.compress("./tempdir/tmp"+tmpfilesuffix+".txt","./tempdir/HMDP.txt") 
-	os.system("rm ./tempdir/tmp"+tmpfilesuffix+".txt")
-	os.system("py7zr c output.7z ./")
-	os.system("mv output.7z ../out/"+str(fnlocal)+".7z")
+	os.system("del .\\tempdir\\"+str(fnlocal))
+	compress.compress("./tempdir","./tempdir/HMDP.txt") 
+	os.system("del .\\tempdir\\tmp"+tmpfilesuffix+".txt")
+	os.system("py7zr c output.7z ./tempdir")
+	os.system("move output.7z ../out/"+str(fnlocal)+".7z")
 
 	'''
 	with open('../datamisc/output'+shour+'.txt','w') as f:
@@ -46,4 +48,4 @@ for fnlocal in os.listdir(path):
 	print(" ---  Bin size = %s seconds   --- " % (binsize))
 	print(" ---  Completed in %s seconds --- " % (t))
 	print("--------------------------------------------------------")
-	os.system("rm ./tempdir/*")
+	os.system("del /Q .\\tempdir\\*")
