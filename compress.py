@@ -77,8 +77,8 @@ def decompress(path,output, pctls, upper_frequency):
 
 
 
-compress("C:/Users/Joseph Ross/Documents/F_Github/datamisc/outputs","test_output2")
+#compress("C:/Users/Joseph Ross/Documents/F_Github/datamisc/outputs","test_output2")
 
-decompress("C:/Users/Joseph Ross/Documents/F_Github/pypam/pypam/test_output2","outFFF.txt",9,5000)
+#decompress("C:/Users/Joseph Ross/Documents/F_Github/pypam/pypam/test_output2","outFFF.txt",9,5000)
 
 
