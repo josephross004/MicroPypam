@@ -30,7 +30,7 @@ for fnlocal in os.listdir(path):
 			s = ''.join(s.splitlines())
 			f.write(s.replace("]",'').replace("[",'')+"\n")
 	os.system("del .\\tempdir\\"+str(fnlocal))
-	compress.compress("./tempdir","./tempdir/HMDP.txt") 
+	compress.compress("./tempdir","./tempdir/"+str(fnlocal)+".txt") 
 	os.system("del .\\tempdir\\tmp"+tmpfilesuffix+".txt")
 	os.system("py7zr c output.7z ./tempdir")
 	os.system("move output.7z ../out/"+str(fnlocal)+".7z")
