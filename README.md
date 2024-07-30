@@ -1,5 +1,7 @@
 # MicroPypam: Stripped PyPam for use on embedded 32-bit system
 
+## !!This package is still under development and may not function as intended!!
+
 ## ACKNOWLEDGEMENTS
 The [PyPam](https://github.com/lifewatch/pypam), [PyHydrophone](https://github.com/lifewatch-pyhydrophone) projects contributed greatly to this effort. 
 
