@@ -2,10 +2,12 @@ from hmsMain import hms, ihms
 from math import log10
 import matplotlib.pyplot as plt
 import numpy
+import os
+import compress
 
 
 def plotPCDFromText(fileName,band,sf=1,title=""):
-    """Plot percentile data from an hmsp file.
+    """Plot percentile data from a decompressed hmsp file.
 
     Args:
         fileName (string): location of file to plot.
@@ -29,6 +31,20 @@ def plotPCDFromText(fileName,band,sf=1,title=""):
     plt.title(label=title)
     plt.legend()
     plt.show()
+
+def plotHMSPData(fileName,band,pctls,sf=1,title=""):
+    """Plot percentile data from an hmsp file.
+
+    Args:
+        fileName (string): location of file to plot.
+        band (tuple): lowest frequency and highest frequency to plot.
+        sf (int, optional): starting figure number, if used in conjunction with another function. Defaults to 1.
+        title (str, optional): title of the graph plotted. Defaults to "".
+    """
+    plt.rcParams.update({'font.size': 300})
+    compress.decompress(fileName,"plotNow.txt",pctls)
+    plotPCDFromText("plotNow.txt",band,sf=sf,title=title)
+
 
 def plotPCData(percentileData,band,sf=1,title=""):
     """Plot percentile data from NumPy array.

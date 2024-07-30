@@ -54,7 +54,7 @@ def compress(path,outputname):
     
 
 def decompress(path,output,pctls):
-    """_summary_
+    """decompress an HMSP file.
 
     Args:
         path (string): path to compressed HMSP file.
