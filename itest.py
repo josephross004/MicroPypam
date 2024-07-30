@@ -15,7 +15,12 @@ import plots
 print("plots: passed")
 import compress
 print("compress: passed")
-os.system("mkdir ../in")
-os.system("mkdir ../out")
-os.system("mkdir ../processed")
+if os.name == "nt":
+  os.system("mkdir ..\\in")
+  os.system("mkdir ..\\out")
+  os.system("mkdir ..\\processed")
+else:
+  os.system("mkdir ../in")
+  os.system("mkdir ../out")
+  os.system("mkdir ../processed")
 print("Done. To run this program, place .wav files in ../in and run stream_process.py")
