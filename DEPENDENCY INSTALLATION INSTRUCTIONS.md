@@ -2,9 +2,11 @@
 `$ mkdir ~/MicroPypam && cd ~/MicroPypam`
 
 make venv
+
 `$ virtualenv env`
 
 verify python=3.11
+
 `$ ls env/lib`
 > python3.11
 
@@ -29,14 +31,19 @@ This process may take a while.
 These next packages have to be installed in separate commands, or the computer runs out of memory.
 
 `$ pip install meson`
+
 `$ pip install meson-python`
+
 `$ pip install Cython`
+
 `$ pip install packaging`
+
 `$ pip install pyproject-metadata`
 
 the installer doesn't select the right wheel to install scikit-learn. download the wheel directly, then install. 
 
 `$ wget https://www.piwheels.org/simple/scikit-learn/scikit_learn-1.4.2-cp311-cp311-linux_armv7l.whl`
+
 `$ pip install scikit_learn-1.4.2-cp311-cp311-linux_armv7l.whl`
 
 INSTALLING LLVMLITE: This is the *problem* with pypam on this machine. The installer for llvmlite expects 64-bit architecture so it results in lots of problems. Here's what you do to install it from source.
@@ -50,6 +57,7 @@ INSTALLING LLVMLITE: This is the *problem* with pypam on this machine. The insta
 `$ cd llvmlite-0.43.0`
 
 `$ python setup.py build`
+
 If you get a c++ process killed error, just run this again, it'll pick right back up. This process can take a long time.
 
 `$ python runtests.py`
@@ -60,15 +68,18 @@ If you get a c++ process killed error, just run this again, it'll pick right bac
 `$ python setup.py install`
 
 `$ cd ..`
+
 `$ python`
 
 `>>> import llvmlite`
+
 `>>> ^D `
 
 (pressed Ctrl+D to exit python)
 If there is a ModuleNotFoundError then something went wrong.
 
 `$ pip install numba`
+
 `$ pip install librosa`
 
 `$ pip install noisereduce==2.0.1`
@@ -91,6 +102,7 @@ and then `$ pip install pvlib-0.11.0-py3-none-any.whl`
 `$ pip install py7zr`
 
 now, reinstall the correct NumPy
+
 `$ pip install numpy==1.26.4`
 
 # INSTALLING MicroPypam
@@ -101,4 +113,5 @@ This is a custom rebuild of PyPam (https://github.com/lifewatch/pypam) designed 
 
 Run tests to ensure that it works.
 `$ cd microPypam`
+
 `$ python itest.py`
