@@ -5,8 +5,7 @@
 ## ACKNOWLEDGEMENTS
 The [PyPam](https://github.com/lifewatch/pypam), [PyHydrophone](https://github.com/lifewatch-pyhydrophone) projects contributed greatly to this effort. 
 
-## KNOWN ISSUES
-[x]
+
 
 ## REFERENCES
 > Parcerisas, C. (2023). PyPAM: a package to process long-term underwater acoustics data in chunks (0.3.0). Zenodo. https://doi.org/10.5281/zenodo.10037826
