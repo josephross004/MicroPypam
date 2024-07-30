@@ -1,9 +1,14 @@
 import numpy as np
-import py7zr
 import os
 import codecs
 from hmsMain import hms, ihms
 def compress(path,outputname):
+    """compress percentiles to a HMSP file using utf-8 and byte adjustment, to minimize space.
+
+    Args:
+        path (string): location of hybrid millidecade spectra percentiles
+        outputname (string): destination for HMSP file.
+    """
     C = []
     O = []
     for fnlocal in os.listdir(path):
@@ -11,25 +16,28 @@ def compress(path,outputname):
         if os.path.isfile(filename):
             A = np.loadtxt(filename)
             s = ''
+
+            # Convert numpy array txt file to hexadecimal (COMPRESSION: 2:1)
             for i in A:
                 for j in i:
                     if j>127 and j<177:
+                        #HACK: fix compatibility issues with utf-8
                         s += "c2"+str(hex(int(j)+68))[2:]
                     else:
                         s += str(hex(int(j)))[2:]
             C.append(s)
             hexes = s.split("c2")
             FLAG = False
+
+            # decode hexadecmial, 2 numbers to 1 byte. (net COMPRESSION: 4:1)
             for i in hexes:
                 if i=="":
                      i = 'c2'    
                 if not FLAG:
-                    #print("hex " + i + " utf8 " + bytes.fromhex(i).decode("utf-8"))
                     O.append(bytes.fromhex(i).decode("utf-8"))
                     FLAG = True
                 else:
                     try:
-                        #print("hex " + i + " utf8 " + bytes.fromhex("c2"+i).decode("utf-8"))
                         O.append(bytes.fromhex("c2"+i).decode("utf-8"))
                     except UnicodeDecodeError:
                         t = (int(i[0:2],16))
@@ -39,23 +47,27 @@ def compress(path,outputname):
                             t += 50
                         t = str(hex(t))[2:]
                         i = t + i[2:]
-                        #print("hex " + i + " utf8 " + bytes.fromhex("c3"+i).decode("utf-8"))
                         O.append(bytes.fromhex("c3"+i).decode("utf-8"))
     with codecs.open(outputname,"w","utf-8-sig") as f:
         for i in O:
             f.write(str(i))
-            #print(i)
     
 
-def decompress(path,output, pctls, upper_frequency):
-    ul = hms(upper_frequency)
+def decompress(path,output,pctls):
+    """_summary_
+
+    Args:
+        path (string): path to compressed HMSP file.
+        output (string): destination for uncompressed file.
+        pctls (int): number of percentile curves generated.
+    """
     with open(path, 'r', encoding="utf-8") as f:
         encoded = f.readlines()[0]
     print(str(len(encoded))+" bytes read in.")
     decoded = ''
     newline_flag = 0
     for i in encoded[1:]:
-        if newline_flag==9:
+        if newline_flag==pctls:
             newline_flag = 0
             decoded += "\n"
         hexrep = i.encode("utf-8").hex()
@@ -63,12 +75,9 @@ def decompress(path,output, pctls, upper_frequency):
             decoded += str(int(hexrep,16))+" "
         else:
             #length is 4. the character either begins with c2 or c3.
-            #if it's c2, then subtract 50,
-            #if it's c3, add 50.
+            #if it's c2, then subtract 68,
+            #if it's c3, then subtract 18.
             if hexrep[1]=='3':
-                t = int(hexrep[2:],16)-18
-                while t<127:
-                    t += 50
                 decoded += str(int(hexrep[2:],16)-18) + " "
             else:
                 decoded += str(int(hexrep[2:],16)-68) + " "

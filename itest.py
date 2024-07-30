@@ -1,3 +1,4 @@
+import os
 import acoustic_survey
 print("acoustic_survey: passed")
 import hydrophone
@@ -14,3 +15,7 @@ import plots
 print("plots: passed")
 import compress
 print("compress: passed")
+os.system("mkdir ../in")
+os.system("mkdir ../out")
+os.system("mkdir ../processed")
+print("Done. To run this program, place .wav files in ../in and run stream_process.py")

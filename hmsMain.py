@@ -1,11 +1,18 @@
 from math import log10
 from numpy import percentile, eye
-import soundtrap
 import icListen
 from acoustic_survey import ASA
 
 #HMS calculators
 def ihms(k):
+    """inverse hybrid millidecade bin. calculate the boundaries of a bin, given a bin number.
+
+    Args:
+        k (int): bin number to calculate the boundaries of.
+
+    Returns:
+        tuple: (low frequency, center frequency, high frequency)
+    """
     #input: Band number, output: Frequency range as tuple (low, center, high)
     if k<0:
         return (0,0,0)
@@ -15,6 +22,14 @@ def ihms(k):
     return (435*(10**((k-435.5)/1000)),435*(10**((k-435)/(1000))),435*(10**((k-434.5)/(1000))))
 
 def hms(f):
+    """calculate the hybrid millidecade bin number, given a frequency.
+
+    Args:
+        f (int): frequency to find bin number of.
+
+    Returns:
+        int: bin number.
+    """
     #input: frequency, output: band number
     if f<0:
         return 0
@@ -25,6 +40,16 @@ def hms(f):
 
 
 def calcHMS(path,band,binsize):
+    """calculate hybrid millidecade spectra using icListen parameters using PyPam's acoustic survey method.
+
+    Args:
+        path (string): location of file.
+        band (tuple): lowest and highest frequency to study.
+        binsize (int): length of each PSD window to calculate.
+
+    Returns:
+        numpy.ndarray: hybrid millidecade spectra of the input file.
+    """
     #WRONG, IGNORE: ex. Soundtrap. icListen is not in the pyhydrophone library so this is something on the to do list.
     model = 'RB9-ETH'
     name = 'icListen'
@@ -61,11 +86,18 @@ def calcHMS(path,band,binsize):
     milli_psd = asa.hybrid_millidecade_bands(db=True, method='density',
                                             band=band,
                                             percentiles=None)
-    #HACK: print(milli_psd['millidecade_bands'])
-    print("Time to return...")
     return milli_psd['millidecade_bands']
         
 def calcPercentilesFromHMS(band,hmsData):
+    """Calculate percentiles, usually streamed in from calcHMS().
+
+    Args:
+        band (tuple): lowest and highest frequency to study.
+        hmsData (numpy.ndarray): hybrid millidecade spectra from calcHMS().
+
+    Returns:
+        numpy.ndarray: percentile data of hybrid millidecade spectra.
+    """
     hmsData = hmsData.transpose()
     #Percentiles, hardcoded lol
     percentiles = [1,5,10,25,50,75,90,95,99]
