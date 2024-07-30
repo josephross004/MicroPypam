@@ -43,10 +43,6 @@ class Signal:
         self._fs = fs
         if len(signal.shape) > 1:
             signal = signal[:, channel]
-        #TESTING _--------------------------------
-        import sys
-        print("Size of ndarray: "+str(sys.getsizeof(signal)))
-        #TESTING _--------------------------------
         self._signal = signal.copy()
 
         # Init processed signal

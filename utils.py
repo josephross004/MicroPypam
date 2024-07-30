@@ -464,18 +464,12 @@ def spectra_ds_to_bands(psd, bands_limits, bands_c, fft_bin_width, db=True):
 
     """
     fft_freq_indices = (np.floor((np.array(bands_limits) + (fft_bin_width / 2)) / fft_bin_width)).astype(int)
-    print("fft freq indices assign")
     original_first_fft_index = int(psd.frequency.values[0] / fft_bin_width)
-    print("original first fft index assign")
     fft_freq_indices -= original_first_fft_index
-    print("fft freq indices subtract")
     if fft_freq_indices[-1] > (len(psd.frequency) - 1):
-        print("fft freq indices end adjusting")
         fft_freq_indices[-1] = len(psd.frequency) - 1
-        print("fft freq indices end adjusted.")
     limits_df = pd.DataFrame(data={'lower_indexes': fft_freq_indices[:-1], 'upper_indexes': fft_freq_indices[1:],
                                    'lower_freq': bands_limits[:-1], 'upper_freq': bands_limits[1:]})
-    print("limits df pandas dataframe initialized.")
     limits_df['lower_factor'] = limits_df['lower_indexes'] * fft_bin_width + fft_bin_width / 2 - limits_df[
         'lower_freq'] + psd.frequency.values[0]
     limits_df['upper_factor'] = limits_df['upper_freq'] - (
@@ -492,29 +486,18 @@ def spectra_ds_to_bands(psd, bands_limits, bands_c, fft_bin_width, db=True):
         psd_bands = psd_bands.assign_coords({'frequency_bins': ('frequency', bands_c)})
         psd_bands = psd_bands.swap_dims({'frequency': 'frequency_bins'}).drop_vars('frequency')
     else:
-        print("The problem might be right here...")
         psd_bands = psd_without_borders.groupby_bins('frequency', bins=bands_limits, labels=bands_c, right=False).sum()
-        print("I guess not. Continuing...")
         psd_bands = psd_bands.fillna(0)
-    print("Made it through the else...")
     psd_bands = psd_bands + psd_limits_lower.values
     psd_bands = psd_bands + psd_limits_upper.values
-    print("Assigned psd bands...")
     psd_bands = psd_bands.assign_coords({'lower_frequency': ('frequency_bins', limits_df['lower_freq'])})
-    print("LF coords assigned to psd bands...")
     psd_bands = psd_bands.assign_coords({'upper_frequency': ('frequency_bins', limits_df['upper_freq'])})
-    print("UF coords assigned to psd bands...")
     bandwidths = psd_bands.upper_frequency - psd_bands.lower_frequency
-    print("bandwidths assigned...")
     psd_bands = psd_bands / bandwidths
-    print("psd_bands divided...")
     if db:
-        print("entering db conditional...")
         psd_bands = 10 * np.log10(psd_bands)
-        print("db calculated. returning...")
 
     psd_bands.attrs.update(psd.attrs)
-    print("attrs updated...")
     return psd_bands
 
 
