@@ -8,16 +8,22 @@ import compress
 import string
 import random
 #path = "../in"
-path = "E:\\J_40D"
+path = "../in"
 binsize = 10.0
 band1 = [0,2500]
 start_time = time.time()
+
+#make directories for processing, in, out.
+os.system("mkdir ../in")
+os.system("mkdir ../out")
+os.system("mkdir ../processed")
+
 
 g = open("timelog.txt","a")
 for fnlocal in os.listdir(path):
 	filename = os.path.join(path,fnlocal)
 	os.system("mkdir tempdir")
-	os.system("copy "+str(filename)+" .\\tempdir")
+	os.system("cp "+str(filename)+" ./tempdir")
 	tpath = "./tempdir"
 	q = hmsMain.calcHMS(tpath,band1,binsize)
 	print("FINISHED CALCULATING HMS FROM SIGNAL! CALCULATING PERCENTILES...")
@@ -29,11 +35,12 @@ for fnlocal in os.listdir(path):
 			s = str(a[1][0][i])
 			s = ''.join(s.splitlines())
 			f.write(s.replace("]",'').replace("[",'')+"\n")
-	os.system("del .\\tempdir\\"+str(fnlocal))
-	compress.compress("./tempdir","./tempdir/"+str(fnlocal)+".txt") 
-	os.system("del .\\tempdir\\tmp"+tmpfilesuffix+".txt")
-	os.system("py7zr c output.7z ./tempdir")
-	os.system("move output.7z ../out/"+str(fnlocal)+".7z")
+	os.system("rm ./tempdir/"+str(fnlocal))
+	compress.compress("./tempdir","../out/"+str(fnlocal)+".txt") 
+	# UNCOMMENT THE NEXT THREE LINES TO COMPRESS
+	#os.system("rm ./tempdir/tmp"+tmpfilesuffix+".txt")
+	#os.system("py7zr c output.7z ./tempdir")
+	#os.system("rm output.7z ../out/"+str(fnlocal)+".7z")
 
 	'''
 	with open('../datamisc/output'+shour+'.txt','w') as f:
@@ -48,4 +55,5 @@ for fnlocal in os.listdir(path):
 	print(" ---  Bin size = %s seconds   --- " % (binsize))
 	print(" ---  Completed in %s seconds --- " % (t))
 	print("--------------------------------------------------------")
-	os.system("del /Q .\\tempdir\\*")
+	os.system("rm -rf ./tempdir/*")
+	os.system("mv "+filename+" ../processed/")
