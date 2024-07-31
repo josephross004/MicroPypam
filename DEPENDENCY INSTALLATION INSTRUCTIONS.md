@@ -57,6 +57,8 @@ the installer doesn't select the right wheel to install scikit-learn. download t
 
 INSTALLING LLVMLITE: This is the *problem* with pypam on this machine. The installer for llvmlite expects 64-bit architecture so it results in lots of problems. Here's what you do to install it from source.
 
+`$ sudo apt install llvm`
+
 `$ sudo apt install cmake`
 
 `$ wget https://github.com/numba/llvmlite/archive/refs/tags/v0.43.0.tar.gz`
