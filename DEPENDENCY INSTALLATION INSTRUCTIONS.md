@@ -103,6 +103,8 @@ and then `$ pip install pvlib-0.11.0-py3-none-any.whl`
 
 now, reinstall the correct NumPy
 
+`$ pip uninstall numpy`
+
 `$ pip install numpy==1.26.4`
 
 # INSTALLING MicroPypam
