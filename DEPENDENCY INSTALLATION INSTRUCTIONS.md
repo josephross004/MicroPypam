@@ -1,3 +1,11 @@
+# IMPORTANT: WHEEL SOURCE 
+### (FOR TS-7553, RASPBERRY PI, ARM ARCHITECTURE)
+Please add the following two lines to your `/etc/conf` directory:
+
+`[global]`
+
+`extra-index-url=https://piwheels.org/simple`
+
 # CONSTRUCT VENV
 `$ mkdir ~/MicroPypam && cd ~/MicroPypam`
 
