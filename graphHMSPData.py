@@ -7,7 +7,7 @@ Tk().withdraw()
 
 filename = askopenfilename()
 
-plot_hmsp.plotHMSPData(filename, [0,2500],9,sf=3)
+plot_hmsp.plotHMSPData(filename, [0,2500],9,sf=3,title=filename[str(filename).rfind("/")+1:])
 
 
 
