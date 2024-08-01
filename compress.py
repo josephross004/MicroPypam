@@ -26,7 +26,10 @@ def compress(path,outputname):
                     else:
                         s += str(hex(int(j)))[2:]
             C.append(s)
-            hexes = s.split("c2")
+            for i in range(0,len(s)-1,2):
+                if s[i:i+2]=="c2":
+                    s = s[:i]+"SP"+s[i+2:]
+            hexes = s.split("SP")
             FLAG = False
 
             # decode hexadecmial, 2 numbers to 1 byte. (net COMPRESSION: 4:1)

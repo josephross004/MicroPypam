@@ -25,7 +25,7 @@ def plotPCDFromText(fileName,band,sf=1,title=""):
     plt.xlim([band[0],band[1]])
     #plt.xticks([10**(ihms(i)[1]) for i in range(0,round(log10(hms(band[1])))+1)])
     plt.title("Empirical Probability")
-    plt.ylim([50,200])
+    plt.ylim([0,200])
     plt.ylabel("Sound Level (dB)")
     plt.xlabel("Frequency (Hz)")
     plt.title(label=title)
