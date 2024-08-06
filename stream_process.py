@@ -5,6 +5,24 @@ import time
 import compress
 import string
 import random
+import requests
+import time
+
+# -----Check Version!
+try:
+	V = requests.get("https://raw.githubusercontent.com/josephross004/MicroPypam/main/build.txt")
+	with open("build.txt",'r') as ver:
+		v = ver.read()
+		if str(V.text)!=str(v):
+			print("!!! NEW VERSION AVAILABLE !!!")
+			print("If you have Git installed, please run the command")
+			print("\t$ git pull origin main")
+			print("to install it. Thank you!")
+			print("!!! NEW VERSION AVAILABLE !!!")
+			time.sleep(3)
+except:
+	pass
+# -----End Check Version
 
 win = False
 
