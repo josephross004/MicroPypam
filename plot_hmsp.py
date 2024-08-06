@@ -6,7 +6,7 @@ import os
 import compress
 
 
-def plotPCDFromText(fileName,band,sf=1,title=""):
+def plotPCDFromText(fileName,band,sf=1,title="",transpose=False,linear=False):
     """Plot percentile data from a decompressed hmsp file.
 
     Args:
@@ -17,22 +17,40 @@ def plotPCDFromText(fileName,band,sf=1,title=""):
     """
     percentileData = numpy.loadtxt(fileName)
     p0 = (1,5,10,25,50,75,90,95,99)
-    for i in range(len(p0)):
-        print(percentileData[:,i])
-        bin_space = [ihms(x)[1]+band[0] for x in range(len(percentileData[:,1]))]
-        plt.plot(bin_space, percentileData[:,i], label='P'+str(p0[i]))
-    plt.xscale('log')
-    plt.xlim([band[0],band[1]])
-    #plt.xticks([10**(ihms(i)[1]) for i in range(0,round(log10(hms(band[1])))+1)])
-    plt.title("Empirical Probability")
-    plt.ylim([0,200])
-    plt.ylabel("Sound Level (dB)")
-    plt.xlabel("Frequency (Hz)")
+    if not transpose:
+        for i in range(len(p0)):
+            print(percentileData[:,i])
+            bin_space = [ihms(x)[1]+band[0] for x in range(len(percentileData[:,1]))]
+            plt.plot(bin_space, percentileData[:,i], label='P'+str(p0[i]))
+        if not linear:
+            plt.xscale('log')
+        else:
+            plt.xscale('linear')
+        plt.xlim([band[0],band[1]])
+        #plt.xticks([10**(ihms(i)[1]) for i in range(0,round(log10(hms(band[1])))+1)])
+        plt.title("Empirical Probability")
+        plt.ylim([0,200])
+        plt.ylabel("Sound Level (dB)")
+        plt.xlabel("Frequency (Hz)")
+    else:
+        for i in range(len(p0)):
+            print(percentileData[:,i])
+            bin_space = [ihms(x)[1]+band[0] for x in range(len(percentileData[:,1]))]
+            plt.plot(percentileData[:,i], bin_space, label='P'+str(p0[i]))
+        if not linear:
+            plt.yscale('log')
+        else:
+            plt.yscale('linear')
+        plt.ylim([band[0],band[1]])
+        #plt.xticks([10**(ihms(i)[1]) for i in range(0,round(log10(hms(band[1])))+1)])
+        plt.xlim([0,200])
+        plt.xlabel("Sound Level (dB)")
+        plt.ylabel("Frequency (Hz)")
     plt.title(label=title)
     plt.legend()
     plt.show()
 
-def plotHMSPData(fileName,band,pctls,sf=1,title=""):
+def plotHMSPData(fileName,band,pctls,sf=1,title="",transpose=False,linear=False):
     """Plot percentile data from an hmsp file.
 
     Args:
@@ -43,7 +61,7 @@ def plotHMSPData(fileName,band,pctls,sf=1,title=""):
     """
     plt.rcParams.update({'font.size': 300})
     compress.decompress(fileName,"plotNow.txt",pctls)
-    plotPCDFromText("plotNow.txt",band,sf=sf,title=title)
+    plotPCDFromText("plotNow.txt",band,sf=sf,title=title,transpose=transpose,linear=linear)
 
 
 def plotPCData(percentileData,band,sf=1,title=""):
