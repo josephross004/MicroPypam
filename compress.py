@@ -77,7 +77,39 @@ def decompress(path,output,pctls):
     print(str(len(decoded))+" bytes decompressed.")
             
 
+def decompressOld(path,output,pctls):
+    """decompress an HMSP file.
 
+    Args:
+        path (string): path to compressed HMSP file.
+        output (string): destination for uncompressed file.
+        pctls (int): number of percentile curves generated.
+    """
+    with open(path, 'r', encoding="utf-8") as f:
+        encoded = f.readlines()[0]
+    print(str(len(encoded))+" bytes read in.")
+    decoded = ''
+    newline_flag = 0
+    for i in encoded[1:]:
+        if newline_flag==pctls:
+            newline_flag = 0
+            decoded += "\n"
+        hexrep = i.encode("utf-8").hex()
+        if len(hexrep)==2:
+            decoded += str(int(hexrep,16))+" "
+        else:
+            #length is 4. the character either begins with c2 or c3.
+            #if it's c2, then subtract 68,
+            #if it's c3, then subtract 18.
+            if hexrep[1]=='3':
+                decoded += str(int(hexrep[2:],16)-18) + " "
+            else:
+                decoded += str(int(hexrep[2:],16)-68) + " "
+        newline_flag += 1
+    with open(output, 'w') as o:
+        o.write(decoded)
+    print(str(len(decoded))+" bytes decompressed.")
+            
 
 #compress("C:/Users/Joseph Ross/Documents/F_Github/datamisc/outputs","test_output2")
 

@@ -32,7 +32,7 @@ def plotPCDFromText(fileName,band,sf=1,title=""):
     plt.legend()
     plt.show()
 
-def plotHMSPData(fileName,band,pctls,sf=1,title=""):
+def plotHMSPData(fileName,band,pctls,sf=1,title="",old=False):
     """Plot percentile data from an hmsp file.
 
     Args:
@@ -42,7 +42,10 @@ def plotHMSPData(fileName,band,pctls,sf=1,title=""):
         title (str, optional): title of the graph plotted. Defaults to "".
     """
     plt.rcParams.update({'font.size': 300})
-    compress.decompress(fileName,"plotNow.txt",pctls)
+    if old:
+        compress.decompressOld(fileName,"plotNow.txt",pctls)
+    else:
+        compress.decompress(fileName,"plotNow.txt",pctls)
     plotPCDFromText("plotNow.txt",band,sf=sf,title=title)
 
 
