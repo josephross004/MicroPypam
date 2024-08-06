@@ -474,7 +474,7 @@ class Signal:
         noverlap = nfft * overlap
         if nfft > self.signal.size:
             self.fill_or_crop(n_samples=nfft)
-        window = np.float16(sig.get_window(window_name, nfft))
+        window = np.float16(sig.get_window(window_name, int(nfft)))
         freq, psd = sig.welch(self.signal, fs=self.fs, window=window, nfft=nfft, scaling=scaling, noverlap=noverlap,
                               detrend=False, **kwargs)
         if self.band is not None and self.band[0] is not None:
