@@ -26,6 +26,10 @@ def compress(path,outputname):
                         s += "SPc3"+str(hex(int(j)-30))[2:]
                     elif j >= 222:
                         s += "SPc4"+str(hex(int(j)-94))[2:]
+                    elif j<=16:
+                        s += "SPd0"+str(hex(int(j)+128))[2:]
+                    elif j<=0:
+                        s += "SPcfbf"
                     else:
                         s += "SP"+str(hex(int(j)))[2:]
             hexes = s.split("SP")
@@ -68,6 +72,10 @@ def decompress(path,output,pctls):
             elif hexrep[1]=='3':
                 # c3XX
                 decoded += str(int(hexrep[2:],16)+30) + " "
+            elif hexrep[1]=='0':
+                decoded += str(int(hexrep[2:],16)-80) + " "
+            elif hexrep=='cfbf':
+                decoded += "0 "
             else:
                 # c4XX
                 decoded += str(int(hexrep[2:],16)+94) + " "
