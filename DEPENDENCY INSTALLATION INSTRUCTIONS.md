@@ -49,11 +49,13 @@ These next packages have to be installed in separate commands, or the computer r
 
 `$ pip install pyproject-metadata`
 
-the installer doesn't select the right wheel to install scikit-learn. download the wheel directly, then install. 
+(FOR TS-7553-V2 ONLY) the installer doesn't select the right wheel to install scikit-learn. download the wheel directly, then install. 
 
 `$ wget https://www.piwheels.org/simple/scikit-learn/scikit_learn-1.4.2-cp311-cp311-linux_armv7l.whl`
 
 `$ pip install scikit_learn-1.4.2-cp311-cp311-linux_armv7l.whl`
+
+(FOR OTHER DEVICES: Select the correct wheel from piwheels or pypl depending on your computer architecture.)
 
 INSTALLING LLVMLITE: This is the *problem* with pypam on this machine. The installer for llvmlite expects 64-bit architecture so it results in lots of problems. Here's what you do to install it from source.
 
