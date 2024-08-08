@@ -28,7 +28,7 @@ def compress(path,outputname):
                         s += "SPc4"+str(hex(int(j)-94))[2:]
                     elif j<=16:
                         s += "SPd0"+str(hex(int(j)+128))[2:]
-                    elif j<=0:
+                    elif j<=0 or str(j)=='nan':
                         s += "SPcfbf"
                     else:
                         s += "SP"+str(hex(int(j)))[2:]
