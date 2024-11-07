@@ -17,6 +17,7 @@ def plotPCDFromText(fileName,band,sf=1,title="",transpose=False,linear=False):
     """
     percentileData = numpy.loadtxt(fileName)
     p0 = (1,5,10,25,50,75,90,95,99)
+    #Get the minimum and maximum.
     if not transpose:
         for i in range(len(p0)):
             print(percentileData[:,i])
@@ -29,7 +30,7 @@ def plotPCDFromText(fileName,band,sf=1,title="",transpose=False,linear=False):
         plt.xlim([band[0],band[1]])
         #plt.xticks([10**(ihms(i)[1]) for i in range(0,round(log10(hms(band[1])))+1)])
         plt.title("Empirical Probability")
-        plt.ylim([0,200])
+        plt.ylim([numpy.min(percentileData)-5,numpy.max(percentileData)+5])
         plt.ylabel("Sound Level (dB)")
         plt.xlabel("Frequency (Hz)")
     else:
@@ -43,7 +44,7 @@ def plotPCDFromText(fileName,band,sf=1,title="",transpose=False,linear=False):
             plt.yscale('linear')
         plt.ylim([band[0],band[1]])
         #plt.xticks([10**(ihms(i)[1]) for i in range(0,round(log10(hms(band[1])))+1)])
-        plt.xlim([0,200])
+        plt.xlim([numpy.min(percentileData)-5,numpy.max(percentileData)+5])
         plt.xlabel("Sound Level (dB)")
         plt.ylabel("Frequency (Hz)")
     plt.title(label=title)
