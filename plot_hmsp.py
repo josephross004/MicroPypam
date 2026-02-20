@@ -22,6 +22,7 @@ def plotPCDFromText(fileName,band,sf=1,title="",transpose=False,linear=False):
         for i in range(len(p0)):
             print(percentileData[:,i])
             bin_space = [ihms(x)[1]+band[0] for x in range(len(percentileData[:,1]))]
+            print(bin_space)
             plt.plot(bin_space, percentileData[:,i], label='P'+str(p0[i]))
         if not linear:
             plt.xscale('log')
@@ -47,7 +48,8 @@ def plotPCDFromText(fileName,band,sf=1,title="",transpose=False,linear=False):
         plt.xlim([numpy.min(percentileData)-5,numpy.max(percentileData)+5])
         plt.xlabel("Sound Level (dB)")
         plt.ylabel("Frequency (Hz)")
-    plt.title(label=title)
+    # Use os.path.basename to show just the filename, not the whole messy path
+    plt.title(fr"{os.path.basename(title)}")
     plt.legend()
     plt.show()
 
@@ -62,7 +64,7 @@ def plotHMSPData(fileName,band,pctls,sf=1,title="",transpose=False,linear=False)
     """
     plt.rcParams.update({'font.size': 300})
     compress.decompress(fileName,"plotNow.txt",pctls)
-    plotPCDFromText("plotNow.txt",band,sf=sf,title=title,transpose=transpose,linear=linear)
+    plotPCDFromText("plotNow.txt",band,sf=sf,title=fileName,transpose=transpose,linear=linear)
 
 
 def plotPCData(percentileData,band,sf=1,title=""):
@@ -85,7 +87,8 @@ def plotPCData(percentileData,band,sf=1,title=""):
     plt.ylim([50,200])
     plt.ylabel("Sound Level (dB)")
     plt.xlabel("Frequency (Hz)")
-    plt.title(label=title)
+    # Use os.path.basename to show just the filename, not the whole messy path
+    plt.title(fr"File: {os.path.basename(fileName)}")
     plt.legend()
     plt.show()
     
@@ -128,7 +131,8 @@ def plotHMSData(hmsData,percentileData,band,sf=1,title=""):
     plt.ylim([50,160])
     plt.ylabel("Sound Level (dB)")
     plt.xlabel("Frequency (bin no.)")
-    plt.title(label=title)
+    # Use os.path.basename to show just the filename, not the whole messy path
+    plt.title(fr"File")
     plt.legend()
     plt.show()
 
