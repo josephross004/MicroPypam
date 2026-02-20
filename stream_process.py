@@ -61,9 +61,26 @@ for fnlocal in os.listdir(path):
 
 	# calculate percentiles from the spectra
 	a = hmsMain.calcPercentilesFromHMS(band1,q)
+# --- Diagnostic: log HMS peak and labeled Hz ---
+	try:
+		percentiles = a[0]
+		pmatrix = a[1][0]     # matrix: [n_bins x n_percentiles]
+		import numpy as _np
 
-	# calculate the total number of bins
-	ul = hmsMain.hms(band1[1])-hmsMain.hms(band1[0])
+		# Find column for 50th percentile (or nearest)
+		if 50 in percentiles:
+			pidx = list(percentiles).index(50)
+		else:
+			pidx = len(percentiles)//2
+
+		col = pmatrix[:, pidx]
+		k_offset = hmsMain.hms(band1[0])
+		k_peak = int(_np.argmax(col)) + k_offset
+
+		fL, fC, fH = hmsMain.ihms(k_peak)
+		print(f"[HMS DIAG] peak_bin={k_peak}  approx_center_Hz={fC:.3f}")
+	except Exception as _e:
+		print(f"[HMS DIAG] skipped: {_e}")
 
 	# random temporary file generation for writing np array compressing
 	tmpfilesuffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=7))
@@ -71,12 +88,22 @@ for fnlocal in os.listdir(path):
 		tmpfilename = ".\\tempdir\\tmp"+tmpfilesuffix+".txt"
 	else:
 		tmpfilename = "./tempdir/tmp"+tmpfilesuffix+".txt"
-	with open(tmpfilename,'w') as f:
-		# write numpy array to compressible format
-		for i in range(ul):
-			s = str(a[1][0][i])
-			s = ''.join(s.splitlines())
-			f.write(s.replace("]",'').replace("[",'')+"\n")
+	
+	
+	
+	# --- Determine number of HMS bins from the actual data, not from band1 ---
+	pmatrix = a[1][0]                  # shape: [n_bins x n_percentiles]
+	n_bins, n_pcts = pmatrix.shape
+
+	# --- Write the entire percentile row per HMS bin (space-separated) ---
+	with open(tmpfilename, 'w') as f:
+		for i in range(n_bins):
+			row = pmatrix[i, :]  # 1 x n_percentiles
+			# Space-separated row, no brackets
+			f.write(" ".join(f"{float(x)}" for x in row) + "\n")
+
+
+
 
 	#delete the temporary directory
 	if win:
